@@ -12,7 +12,7 @@ data.eset <- data[[1]]
 #looking for species bromii in the data set
 grep("bromii", rownames(data.eset), value=TRUE)
 #gives the correlation value of the abundance of all the species of bacteria against BMI
-sink("my_data.csv")
+sink("MetagenomicData.csv")
 for  (i in rownames(data.eset))
 {
   x = exprs( data.eset )[i, ]
