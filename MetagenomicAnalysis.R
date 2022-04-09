@@ -10,9 +10,10 @@ browseVignettes("curatedMetagenomicData")
 data <- curatedMetagenomicData("LeChatelierE_2013.metaphlan_bugs_list.stool", dryrun = FALSE)
 data.eset <- data[[1]]
 #looking for species bromii in the data set
-grep("bromii", rownames(data.eset), value=TRUE)
+grep("obeum", rownames(data.eset), value=TRUE)
 #gives the correlation value of the abundance of all the species of bacteria against BMI
-sink("MetagenomicData.csv")
+sink("LeChatelierE_2013.csv")
+print("species, pearson correlation to BMI, P-value for pearson, Spearman correlation to BMI, P-value for spearman correlation")
 for  (i in rownames(data.eset))
 {
   x = exprs( data.eset )[i, ]
@@ -23,7 +24,12 @@ for  (i in rownames(data.eset))
   
   graph = merge(y, df, by.x="row.names", by.y="data.eset.subjectID")
   
-  my_data = paste(i, cor(graph$data.eset.BMI, graph$x), sep = ",")
+  tst = cor.test(x=graph$data.eset.BMI, y=graph$x, method = 'spearman', exact = FALSE)
+  
+  res <- cor.test(graph$data.eset.BMI, graph$x, method = "pearson")
+  
+  my_data = paste(i, res$statistic, res$p.value, tst$estimate, tst$p.value, sep = ",")
+  
   print(my_data)
 }
 sink()
@@ -34,7 +40,16 @@ y = as.data.frame(x)
 
 df <- data.frame(data.eset$subjectID, data.eset$BMI)
 
+dff <- data.frame(y, df)
+
 graph = merge(y, df, by.x="row.names", by.y="data.eset.subjectID")
 
 plot(graph$data.eset.BMI, graph$x, xlab = "BMI", ylab = "abundance of species")
-print(cor(graph$data.eset.BMI, graph$x))
+
+print(cor.test(graph$data.eset.BMI, graph$x, method = "pearson"))
+
+print(lm(x~data.eset.BMI , data = dff))
+
+tst = cor.test(x=graph$data.eset.BMI, y=graph$x, method = 'spearman', exact = FALSE)
+
+print(tst)
