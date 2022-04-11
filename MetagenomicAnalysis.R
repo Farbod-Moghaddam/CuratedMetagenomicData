@@ -6,7 +6,7 @@ BiocManager::install("curatedMetagenomicData")
 library(curatedMetagenomicData)
 #documentation
 browseVignettes("curatedMetagenomicData")
-#getting the data, can replace "LeChatelierE_2013" with "NielsenHB_2014" or "FengQ_2014" to look at other datasets
+#getting the data, can replace "LeChatelierE_2013" with "NielsenHB_2014" or "FengQ_2015" to look at the other datasets
 data <- curatedMetagenomicData("LeChatelierE_2013.metaphlan_bugs_list.stool", dryrun = FALSE)
 data.eset <- data[[1]]
 #looking for a specific species in the data set
